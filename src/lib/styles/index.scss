@@ -1,0 +1,206 @@
+$react-range-slider--light-gray: #f5f5f5;
+$react-range-slider--gray: #eeeeee;
+$react-range-slider--highlight-tap: #000000;
+$react-range-slider--rail-bg: #f8f9fb;
+$react-range-slider--handle-bg: #ffffff;
+$react-range-slider--track: #030303;
+$react-range-slider--tick-label: #77828c;
+
+.react_range__range_container {
+  box-sizing: border-box;
+}
+
+// Temporary disabled
+.react_range__track,
+.react_range__rail__outer {
+  pointer-events: none;
+}
+
+.react_range__track {
+  position: absolute;
+  transform: translate(0%, -50%);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease;
+  z-index: 4;
+
+  background-color: rgba(3, 3, 3, 0.05);
+  border-left: 1px solid $react-range-slider--track;
+  border-right: 1px solid $react-range-slider--track;
+}
+
+.react_range__rail {
+  &__outer {
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    transform: translate(0, -50%);
+    cursor: pointer;
+  }
+  &__inner {
+    // background-color
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    transform: translate(0, -50%);
+    pointer-events: none;
+    border: 1px solid $react-range-slider--gray;
+  }
+}
+
+.react_range__handle {
+  &_wrapper {
+    position: absolute;
+    -webkit-tap-highlight-color: $react-range-slider--highlight-tap;
+    z-index: 7;
+    width: 8px;
+    height: 20px;
+    cursor: pointer;
+    background-color: transparent;
+
+    &.left {
+      transform: translate(-100%, -50%);
+    }
+
+    &.right {
+      transform: translate(calc(1px), -50%);
+    }
+  }
+
+  &_container {
+    position: absolute;
+    display: flex;
+    z-index: 5;
+    width: 8px;
+    height: 20px;
+    background-color: $react-range-slider--track;
+    &.left {
+      transform: translate(-100%, -50%);
+      border-radius: 4px 0px 0px 4px;
+    }
+    &.right {
+      transform: translate(1px, -50%);
+      border-radius: 0px 4px 4px 0px;
+    }
+  }
+  &_value {
+    display: block;
+
+    position: absolute;
+    border-radius: 2px;
+    padding: 3px;
+    background-color: rgba(255, 255, 255, 0.8);
+
+    &.left {
+      right: 20px;
+    }
+    &.right {
+      left: 20px;
+    }
+  }
+}
+
+.react_range__slot {
+  &_wrapper {
+    position: absolute;
+    transform: translate(0, -50%);
+    pointer-events: none;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    &.grid {
+      z-index: 0;
+    }
+
+    &.graph {
+      z-index: 1;
+    }
+  }
+}
+
+.react_range__grid {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: translateX(0);
+  z-index: -1;
+  top: 0;
+
+  border-color: $react-range-slider--light-gray !important;
+  border-width: 1px !important;
+
+  &_bold {
+    @extend .react_range__grid;
+    border-color: $react-range-slider--gray !important;
+  }
+}
+
+.react_range__label_wrapper {
+  position: absolute;
+  color: $react-range-slider--tick-label;
+  font-family: sans-serif;
+  font-size: 10px;
+  padding: 5px;
+}
+
+.range {
+  .react_range__label_wrapper {
+    bottom: 0;
+    transform: translateY(100%);
+  }
+
+  .react_range__grid_bold {
+    height: calc(100% + 15px);
+  }
+}
+
+.fill_up {
+  .react_range__label_wrapper {
+    top: 0;
+  }
+  .react_range__grid_bold {
+    height: 100%;
+  }
+}
+
+.react_range__bar_stack {
+  pointer-events: auto;
+  width: calc(100% + 1px);
+  // transform: translateX(0.5px);
+  z-index: 2;
+}
+
+.react_range__dot {
+  position: absolute;
+  transform: translate(-50%, 50%);
+  left: 50%;
+  height: 5px;
+  width: 5px;
+  border: solid 0.5px white;
+  border-radius: 100%;
+  background-color: #c2c2c2;
+}
+
+.react_range__tooltip_wrapper {
+  position: absolute;
+  transform: translate(-50%, 100%);
+  left: 50%;
+  z-index: 10;
+  background-color: white;
+
+  &,
+  .react_range__handle_wrapper:active
+    ~ .react_range__slot_wrapper
+    .react_range__bar_stack:hover
+    ~ & {
+    // display: none;
+    opacity: 0;
+  }
+
+  // &:hover,
+  .react_range__bar_stack:hover ~ & {
+    // display: inherit;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "name": "@chromatic-protocol/react-compound-charts",
+  "version": "1.0.0",
+  "description": "Chart components for React",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "react-component",
+    "react",
+    "slider",
+    "component",
+    "react-slider",
+    "range-slider",
+    "range"
+  ],
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && rollup -c"
+  },
+  "dependencies": {
+    "d3-scale": "^4.0.2",
+    "react-compound-slider": "^3.3.1"
+  },
+  "devDependencies": {
+    "node-sass": "^8.0.0",
+    "typescript": "^5.0.4",
+    "@babel/core": "^7.14.2",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
+    "@babel/preset-typescript": "^7.21.4",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.1.0",
+    "@types/d3-array": "^3.0.5",
+    "@types/d3-scale": "^4.0.3",
+    "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.0.11",
+    "postcss": "^8.4.22",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "rollup": "^2.79.1",
+    "rollup-plugin-postcss": "^4.0.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
