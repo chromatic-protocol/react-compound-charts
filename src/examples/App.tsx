@@ -13,8 +13,11 @@ import {
   barSample,
   dotSample,
 } from "./sampledata";
+
 import { FillUpChart, RangeChart } from "../lib";
+
 import SampleSlider from "./SampleSlider";
+import { useRangeChart } from "../lib/hooks/useRangeChart";
 
 function ToolTipComponent({ index }: any) {
   const style = {
@@ -36,8 +39,12 @@ function ToolTipComponent({ index }: any) {
 }
 
 function App() {
-  const [selectedInterval, setSelectedInterval] = useState(defaultSelected);
-  const [min, max] = selectedInterval;
+  const {
+    data: { min, max, values },
+    setData,
+    ref,
+    move,
+  } = useRangeChart();
 
   const [toggleState, setToggleState] = useState(false);
 
@@ -50,15 +57,21 @@ function App() {
       <h1>Range Chart</h1>
       <div>Min: {min}</div>
       <div>Max: {max}</div>
+      <div>Values: {values?.toString()}</div>
       <button onClick={() => setToggleState(!toggleState)}>Toggle</button>
+      <button onClick={() => move()?.left.prev()}>{"<-"}</button>
+      <button onClick={() => move()?.left.next()}>{"->"}</button>
+      <button onClick={() => move()?.right.prev()}>{"<-"}</button>
+      <button onClick={() => move()?.right.next()}>{"->"}</button>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <RangeChart
+          ref={ref}
           barData={barSample}
           dotData={toggleState ? dotSample : undefined}
           trackConfig={track0}
           labels={ticks0}
-          selectedInterval={selectedInterval}
-          onChangeCallback={setSelectedInterval}
+          defaultValues={defaultSelected}
+          onChangeCallback={setData}
           height={300}
           width={700}
           isGridVisible={toggleState}
@@ -74,8 +87,8 @@ function App() {
           dotData={[]}
           trackConfig={track0}
           labels={ticks0}
-          selectedInterval={selectedInterval}
-          onChangeCallback={setSelectedInterval}
+          defaultValues={defaultSelected}
+          onChangeCallback={setData}
           height={300}
           width={700}
           isGridVisible={toggleState}

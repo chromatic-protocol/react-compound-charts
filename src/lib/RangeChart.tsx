@@ -1,8 +1,15 @@
 import "./styles/index.scss";
 
-import React, { useMemo } from "react";
+import React, {
+  memo,
+  useMemo,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useEffect,
+} from "react";
 
-import { Slider, Handles, Tracks } from "react-compound-slider";
+import { Slider, Handles, Tracks, mode3 } from "react-compound-slider";
 
 import Track from "./components/Track";
 import Grid from "./components/Grid";
@@ -13,7 +20,16 @@ import Slot from "./components/Slot";
 import Label from "./components/Label";
 import Dot from "./components/Dot";
 
-import { BarData, BarDataMap, DotData, DotDataMap, TrackConfig } from "./types";
+import {
+  BarData,
+  BarDataMap,
+  DotData,
+  DotDataMap,
+  RangeChartData,
+  RangeChartRef,
+  TrackConfig,
+} from "./types";
+
 import { getConfigMap, getDataMap } from "./utils";
 
 interface RangeChartProps {
@@ -24,13 +40,13 @@ interface RangeChartProps {
   dotOffset?: number;
   labels: number[];
   trackConfig: TrackConfig[];
-  selectedInterval?: number[];
-  onChangeCallback: Function;
+  defaultValues?: number[];
+  onChangeCallback: (params: RangeChartData) => void;
   isGridVisible?: boolean;
   tooltipComponent?: React.ReactElement<any>;
 }
 
-function RangeChart(props: RangeChartProps) {
+const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
   const {
     height,
     width,
@@ -39,11 +55,13 @@ function RangeChart(props: RangeChartProps) {
     dotOffset = 40,
     labels,
     trackConfig,
-    selectedInterval = [],
+    defaultValues = [],
     onChangeCallback,
     isGridVisible = false,
     tooltipComponent,
   } = props;
+
+  const [selectedValues, setSelectedValues] = useState(defaultValues);
 
   const configMap = useMemo(() => {
     return getConfigMap(trackConfig);
@@ -85,14 +103,33 @@ function RangeChart(props: RangeChartProps) {
   };
 
   const selectedIndexes = useMemo<number[]>(() => {
-    return getIndexes(selectedInterval);
-  }, [selectedInterval]);
+    return getIndexes(selectedValues);
+  }, [selectedValues]);
+
+  function handleChange([minIndex, maxIndex]: number[]) {
+    const [minValue, maxValue] = getValues([minIndex, maxIndex]);
+    setSelectedValues([minValue, maxValue]);
+    onChangeCallback({
+      min: minValue,
+      max: maxValue,
+      values: configMap.track.slice(minIndex, maxIndex),
+    });
+  }
+
+  function initialize([minValue, maxValue]: number[]) {
+    const [minIndex, maxIndex] = getIndexes([minValue, maxValue]);
+    onChangeCallback({
+      min: minValue,
+      max: maxValue,
+      values: configMap.track.slice(minIndex, maxIndex),
+    });
+  }
+
+  useEffect(() => {
+    initialize(defaultValues);
+  }, []);
 
   const domain = [0, configMap.track.length];
-
-  function handleChange(newIndexes: readonly number[]) {
-    onChangeCallback(getValues([...newIndexes]));
-  }
 
   const SLIDER_MODE = 3;
 
@@ -101,6 +138,57 @@ function RangeChart(props: RangeChartProps) {
     height: height,
     padding: `${height / 2}px 0`,
   };
+
+  function getNextIndex(target: number, reverse: boolean) {
+    const newPosition = reverse ? -1 : 1;
+
+    const rest = +!target;
+    const restIndex = selectedIndexes[rest];
+    const targetIndex = selectedIndexes[target];
+
+    let result: number[] = [];
+
+    if (targetIndex + newPosition === restIndex) {
+      result[target] = targetIndex + newPosition;
+      result[rest] = restIndex + newPosition;
+    } else {
+      result[target] = targetIndex + newPosition;
+      result[rest] = restIndex;
+    }
+    if (result[0] < 0 || result[1] > configMap.track.length) {
+      return selectedIndexes;
+    }
+
+    return result;
+  }
+
+  useImperativeHandle(
+    _ref,
+    () => ({
+      getTrackMap: () => {
+        return configMap.track;
+      },
+      move: {
+        left: {
+          next: () => {
+            handleChange(getNextIndex(0, false));
+          },
+          prev: () => {
+            handleChange(getNextIndex(0, true));
+          },
+        },
+        right: {
+          next: () => {
+            handleChange(getNextIndex(1, false));
+          },
+          prev: () => {
+            handleChange(getNextIndex(1, true));
+          },
+        },
+      },
+    }),
+    [configMap.track, selectedIndexes]
+  );
 
   return (
     <div className="react_range__range_container range" style={style}>
@@ -185,5 +273,5 @@ function RangeChart(props: RangeChartProps) {
       </Slider>
     </div>
   );
-}
-export default RangeChart;
+});
+export default memo(RangeChart);
