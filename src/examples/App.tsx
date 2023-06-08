@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState } from "react";
 
 RangeChart;
 
@@ -14,9 +14,10 @@ import {
   dotSample,
 } from "./sampledata";
 
-import { FillUpChart, RangeChart, RangeChartData, RangeChartRef } from "../lib";
+import { FillUpChart, RangeChart } from "../lib";
 
 import SampleSlider from "./SampleSlider";
+import { useRangeChart } from "../lib/hooks/useRangeChart";
 
 function ToolTipComponent({ index }: any) {
   const style = {
@@ -38,16 +39,12 @@ function ToolTipComponent({ index }: any) {
 }
 
 function App() {
-  const rangeChartRef = useRef<RangeChartRef>(null);
-
-  const move = useCallback(
-    () => rangeChartRef?.current?.move,
-    [rangeChartRef?.current]
-  );
-
-  const [{ min, max, values }, setRangeChartData] = useState<RangeChartData>(
-    {}
-  );
+  const {
+    data: { min, max, values },
+    setData,
+    ref,
+    move,
+  } = useRangeChart();
 
   const [toggleState, setToggleState] = useState(false);
 
@@ -68,13 +65,13 @@ function App() {
       <button onClick={() => move()?.right.next()}>{"->"}</button>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <RangeChart
-          ref={rangeChartRef}
+          ref={ref}
           barData={barSample}
           dotData={toggleState ? dotSample : undefined}
           trackConfig={track0}
           labels={ticks0}
           defaultValues={defaultSelected}
-          onChangeCallback={setRangeChartData}
+          onChangeCallback={setData}
           height={300}
           width={700}
           isGridVisible={toggleState}
@@ -91,7 +88,7 @@ function App() {
           trackConfig={track0}
           labels={ticks0}
           defaultValues={defaultSelected}
-          onChangeCallback={setRangeChartData}
+          onChangeCallback={setData}
           height={300}
           width={700}
           isGridVisible={toggleState}
