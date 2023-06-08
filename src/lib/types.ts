@@ -29,3 +29,9 @@ export type DotData = {
 };
 
 export type DotDataMap = Array<DotData["value"]>;
+
+export type RangeChartData = {
+  values?: number[];
+  min?: number;
+  max?: number;
+};
