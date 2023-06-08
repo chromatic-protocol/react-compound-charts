@@ -13,7 +13,8 @@ import {
   barSample,
   dotSample,
 } from "./sampledata";
-import { FillUpChart, RangeChart, RangeChartData } from "../lib";
+
+import { FillUpChart, RangeChart, RangeChartData, RangeChartRef } from "../lib";
 
 import SampleSlider from "./SampleSlider";
 
@@ -37,7 +38,7 @@ function ToolTipComponent({ index }: any) {
 }
 
 function App() {
-  const rangeChartRef = useRef<any>(null);
+  const rangeChartRef = useRef<RangeChartRef>(null);
 
   const move = useCallback(
     () => rangeChartRef?.current?.move,
@@ -61,10 +62,10 @@ function App() {
       <div>Max: {max}</div>
       <div>Values: {values?.toString()}</div>
       <button onClick={() => setToggleState(!toggleState)}>Toggle</button>
-      <button onClick={() => move().left.prev()}>{"<-"}</button>
-      <button onClick={() => move().left.next()}>{"->"}</button>
-      <button onClick={() => move().right.prev()}>{"<-"}</button>
-      <button onClick={() => move().right.next()}>{"->"}</button>
+      <button onClick={() => move()?.left.prev()}>{"<-"}</button>
+      <button onClick={() => move()?.left.next()}>{"->"}</button>
+      <button onClick={() => move()?.right.prev()}>{"<-"}</button>
+      <button onClick={() => move()?.right.next()}>{"->"}</button>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <RangeChart
           ref={rangeChartRef}

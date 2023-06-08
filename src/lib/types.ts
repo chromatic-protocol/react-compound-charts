@@ -35,3 +35,17 @@ export type RangeChartData = {
   min?: number;
   max?: number;
 };
+
+export type RangeChartRef = {
+  getTrackMap: () => number[];
+  move: {
+    left: {
+      next: () => void;
+      prev: () => void;
+    };
+    right: {
+      next: () => void;
+      prev: () => void;
+    };
+  };
+};

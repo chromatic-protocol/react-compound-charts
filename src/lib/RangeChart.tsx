@@ -26,8 +26,10 @@ import {
   DotData,
   DotDataMap,
   RangeChartData,
+  RangeChartRef,
   TrackConfig,
 } from "./types";
+
 import { getConfigMap, getDataMap } from "./utils";
 
 interface RangeChartProps {
@@ -44,7 +46,7 @@ interface RangeChartProps {
   tooltipComponent?: React.ReactElement<any>;
 }
 
-const RangeChart = forwardRef((props: RangeChartProps, _ref) => {
+const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
   const {
     height,
     width,
