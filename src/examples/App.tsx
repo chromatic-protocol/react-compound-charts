@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 
 RangeChart;
 
@@ -36,6 +36,14 @@ function ToolTipComponent({ index }: any) {
 }
 
 function App() {
+  const rangeChartRef = useRef<any>();
+
+  const trackMap = rangeChartRef?.current?.getTrackMap();
+
+  useEffect(() => {
+    if (trackMap) console.log(trackMap);
+  }, [trackMap]);
+
   const [selectedInterval, setSelectedInterval] = useState(defaultSelected);
   const [min, max] = selectedInterval;
 
@@ -53,6 +61,7 @@ function App() {
       <button onClick={() => setToggleState(!toggleState)}>Toggle</button>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <RangeChart
+          ref={rangeChartRef}
           barData={barSample}
           dotData={toggleState ? dotSample : undefined}
           trackConfig={track0}

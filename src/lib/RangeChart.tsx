@@ -1,6 +1,6 @@
 import "./styles/index.scss";
 
-import React, { useMemo } from "react";
+import React, { memo, useMemo, forwardRef, useImperativeHandle } from "react";
 
 import { Slider, Handles, Tracks } from "react-compound-slider";
 
@@ -30,7 +30,7 @@ interface RangeChartProps {
   tooltipComponent?: React.ReactElement<any>;
 }
 
-function RangeChart(props: RangeChartProps) {
+const RangeChart = forwardRef((props: RangeChartProps, _ref) => {
   const {
     height,
     width,
@@ -101,6 +101,16 @@ function RangeChart(props: RangeChartProps) {
     height: height,
     padding: `${height / 2}px 0`,
   };
+
+  useImperativeHandle(
+    _ref,
+    () => ({
+      getTrackMap: () => {
+        return configMap.track;
+      },
+    }),
+    [configMap]
+  );
 
   return (
     <div className="react_range__range_container range" style={style}>
@@ -185,5 +195,5 @@ function RangeChart(props: RangeChartProps) {
       </Slider>
     </div>
   );
-}
-export default RangeChart;
+});
+export default memo(RangeChart);
