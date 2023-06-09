@@ -59,10 +59,11 @@ function App() {
       <div>Max: {max}</div>
       <div>Values: {values?.toString()}</div>
       <button onClick={() => setToggleState(!toggleState)}>Toggle</button>
-      <button onClick={() => move()?.left.prev()}>{"<-"}</button>
-      <button onClick={() => move()?.left.next()}>{"->"}</button>
-      <button onClick={() => move()?.right.prev()}>{"<-"}</button>
-      <button onClick={() => move()?.right.next()}>{"->"}</button>
+      <button onClick={() => move().left.prev()}>{"<-"}</button>
+      <button onClick={() => move().left.next()}>{"->"}</button>
+      <button onClick={() => move().right.prev()}>{"<-"}</button>
+      <button onClick={() => move().right.next()}>{"->"}</button>
+      <button onClick={() => move().full()}>{"full"}</button>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <RangeChart
           ref={ref}

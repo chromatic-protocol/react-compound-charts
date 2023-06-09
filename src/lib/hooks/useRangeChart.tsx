@@ -13,9 +13,8 @@ export function useRangeChart() {
       next: () => {},
       prev: () => {},
     },
+    full: () => {},
   };
-
-  const move = useCallback(() => ref?.current?.move ?? dummys, [ref?.current]);
 
   const [data, setData] = useState<RangeChartData>({
     min: 0,
@@ -23,5 +22,9 @@ export function useRangeChart() {
     values: [],
   });
 
-  return {data, setData, ref, move};
+  const move = useCallback(() => {
+    return ref?.current?.move([data.min, data.max]) ?? dummys;
+  }, [ref?.current, data]);
+
+  return { data, setData, ref, move };
 }

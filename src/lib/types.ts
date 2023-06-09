@@ -38,7 +38,7 @@ export type RangeChartData = {
 
 export type RangeChartRef = {
   getTrackMap: () => number[];
-  move: {
+  move: (indexes: [number, number]) => {
     left: {
       next: () => void;
       prev: () => void;
@@ -47,5 +47,6 @@ export type RangeChartRef = {
       next: () => void;
       prev: () => void;
     };
+    full: () => void;
   };
 };
