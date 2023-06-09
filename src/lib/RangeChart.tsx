@@ -190,6 +190,9 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
               handleChange(getNextIndex(indexes, 1, true));
             },
           },
+          full: () => {
+            handleChange([0, configMap.track.length]);
+          },
         };
       },
     }),

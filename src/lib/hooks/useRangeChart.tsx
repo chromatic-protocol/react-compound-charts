@@ -13,6 +13,7 @@ export function useRangeChart() {
       next: () => {},
       prev: () => {},
     },
+    full: () => {},
   };
 
   const [data, setData] = useState<RangeChartData>({

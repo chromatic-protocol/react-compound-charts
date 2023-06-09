@@ -47,5 +47,6 @@ export type RangeChartRef = {
       next: () => void;
       prev: () => void;
     };
+    full: () => void;
   };
 };
