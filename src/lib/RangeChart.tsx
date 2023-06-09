@@ -9,7 +9,7 @@ import React, {
   useEffect,
 } from "react";
 
-import { Slider, Handles, Tracks, mode3 } from "react-compound-slider";
+import { Slider, Handles, Tracks } from "react-compound-slider";
 
 import Track from "./components/Track";
 import Grid from "./components/Grid";
@@ -110,8 +110,8 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     const [minValue, maxValue] = getValues([minIndex, maxIndex]);
     setSelectedValues([minValue, maxValue]);
     onChangeCallback({
-      min: minValue,
-      max: maxValue,
+      min: minIndex,
+      max: maxIndex,
       values: configMap.track.slice(minIndex, maxIndex),
     });
   }
@@ -119,8 +119,8 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
   function initialize([minValue, maxValue]: number[]) {
     const [minIndex, maxIndex] = getIndexes([minValue, maxValue]);
     onChangeCallback({
-      min: minValue,
-      max: maxValue,
+      min: minIndex,
+      max: maxIndex,
       values: configMap.track.slice(minIndex, maxIndex),
     });
   }
@@ -139,12 +139,16 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     padding: `${height / 2}px 0`,
   };
 
-  function getNextIndex(target: number, reverse: boolean) {
+  function getNextIndex(
+    indexes: [number, number],
+    target: number,
+    reverse: boolean
+  ) {
     const newPosition = reverse ? -1 : 1;
 
     const rest = +!target;
-    const restIndex = selectedIndexes[rest];
-    const targetIndex = selectedIndexes[target];
+    const restIndex = indexes[rest];
+    const targetIndex = indexes[target];
 
     let result: number[] = [];
 
@@ -156,7 +160,7 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
       result[rest] = restIndex;
     }
     if (result[0] < 0 || result[1] > configMap.track.length) {
-      return selectedIndexes;
+      return indexes;
     }
 
     return result;
@@ -168,26 +172,28 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
       getTrackMap: () => {
         return configMap.track;
       },
-      move: {
-        left: {
-          next: () => {
-            handleChange(getNextIndex(0, false));
+      move: (indexes: [number, number]) => {
+        return {
+          left: {
+            next: () => {
+              handleChange(getNextIndex(indexes, 0, false));
+            },
+            prev: () => {
+              handleChange(getNextIndex(indexes, 0, true));
+            },
           },
-          prev: () => {
-            handleChange(getNextIndex(0, true));
+          right: {
+            next: () => {
+              handleChange(getNextIndex(indexes, 1, false));
+            },
+            prev: () => {
+              handleChange(getNextIndex(indexes, 1, true));
+            },
           },
-        },
-        right: {
-          next: () => {
-            handleChange(getNextIndex(1, false));
-          },
-          prev: () => {
-            handleChange(getNextIndex(1, true));
-          },
-        },
+        };
       },
     }),
-    [configMap.track, selectedIndexes]
+    [configMap.track]
   );
 
   return (
