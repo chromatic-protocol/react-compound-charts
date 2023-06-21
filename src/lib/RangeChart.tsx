@@ -87,6 +87,10 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     );
   }, [barData]);
 
+  const dotMaxValue = useMemo<number>(() => {
+    return Math.max(...dotData.map(({ value }) => value)) * 1.2;
+  }, [barData]);
+
   const valueFormatter = (index: number) => configMap.track[index];
 
   const getValues = (indexes: number[]) => {
@@ -250,13 +254,13 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
                   color={configMap.colorList[index]}
                   data={barData}
                   minValue={0}
-                  maxValue={barMaxValue}
+                  maxValue={Math.max(barMaxValue, 0.001)}
                 />
                 <Dot
                   data={dotData}
                   offset={dotOffset}
                   minValue={0}
-                  maxValue={2}
+                  maxValue={Math.max(dotMaxValue, 0.001)}
                 />
                 <Tooltip index={index}>{tooltipComponent}</Tooltip>
               </>
