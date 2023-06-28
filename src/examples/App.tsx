@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-RangeChart;
-
 import {
   selectedInterval as defaultSelected,
   track0,
@@ -15,26 +13,55 @@ import {
 } from "./sampledata";
 
 import { FillUpChart, RangeChart } from "../lib";
-
-import SampleSlider from "./SampleSlider";
 import { useRangeChart } from "../lib/hooks/useRangeChart";
 
-function ToolTipComponent({ index }: any) {
-  const style = {
-    height: 100,
-    width: 100,
-    border: "1px solid black",
-    backgroundColor: "white",
+import SampleSlider from "./SampleSlider";
+
+import { Tooltip } from "react-tooltip";
+import { shift } from "@floating-ui/dom";
+
+function ToolTipComponent() {
+  function getValues(key: any) {
+    return barSample?.find((data: any) => data.key === +key)?.value;
+  }
+
+  const fixToBottom = {
+    name: "fixToBottom",
+    fn({ x, elements }) {
+      const bottomOfSlot =
+        (elements.reference?.offsetParent.getBoundingClientRect().bottom ?? 0) +
+        window.scrollY;
+
+      return {
+        x,
+        y: bottomOfSlot,
+      };
+    },
   };
 
-  const { value } = barSample[index];
-
   return (
-    <div style={style}>
-      {value?.map(({ label, amount }: any, idx: number) => (
-        <div key={idx}>{`${label}: ${amount}`}</div>
-      ))}
-    </div>
+    <Tooltip
+      style={{ zIndex: 999 }}
+      anchorSelect={`.react_range__bar_stack.available, .react_range__bar_stack.utilized`}
+      middlewares={[shift(), fixToBottom]}
+      place="bottom"
+      render={({ content: key }) => {
+        const values = getValues(key);
+        const utilized = values?.find(
+          ({ label }) => label === "utilized"
+        ).amount;
+        const available = values?.find(
+          ({ label }) => label === "available"
+        ).amount;
+        return (
+          <>
+            <div>key: {key}</div>
+            <div>utilized: {utilized}</div>
+            <div>available: {available}</div>
+          </>
+        );
+      }}
+    />
   );
 }
 
@@ -54,6 +81,7 @@ function App() {
 
   return (
     <div>
+      <ToolTipComponent />
       <h1>Range Chart</h1>
       <div>Min: {min}</div>
       <div>Max: {max}</div>
@@ -64,7 +92,10 @@ function App() {
       <button onClick={() => move().right.prev()}>{"<-"}</button>
       <button onClick={() => move().right.next()}>{"->"}</button>
       <button onClick={() => move().full()}>{"full"}</button>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        className="rangeChart_sample"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
         <RangeChart
           ref={ref}
           barData={barSample}
@@ -76,7 +107,6 @@ function App() {
           height={300}
           width={700}
           isGridVisible={toggleState}
-          tooltipComponent={<ToolTipComponent />}
         />
       </div>
 
@@ -119,7 +149,6 @@ function App() {
           height={300}
           width={700}
           selectableLabel="available"
-          tooltipComponent={<ToolTipComponent />}
         />
       </div>
 
@@ -143,7 +172,6 @@ function App() {
           height={300}
           width={700}
           selectableLabel="available"
-          tooltipComponent={<ToolTipComponent />}
         />
       </div>
 
