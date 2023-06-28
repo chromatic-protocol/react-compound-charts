@@ -245,9 +245,12 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
             const barData = barDataMap[index];
             const dotData = dotDataMap[index];
 
+            const position = valueFormatter(index);
+
             return (
               <>
                 <Bar
+                  position={position}
                   color={configMap.colorList[index]}
                   data={barData}
                   minValue={0}

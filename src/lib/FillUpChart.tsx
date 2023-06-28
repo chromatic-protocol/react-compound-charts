@@ -110,13 +110,15 @@ function FillUpChart(props: FillUpChartProp) {
       >
         <Slot size={configMap.track.length} height={height} className={`graph`}>
           {({ index }) => {
+            const position = valueFormatter(index);
+
             return (
               <Bar
                 color={configMap.colorList[index]}
                 data={dataMap[index]}
                 minValue={0}
                 maxValue={Math.max(maxValue, 0.001)}
-                format={valueFormatter}
+                position={position}
               />
             );
           }}
