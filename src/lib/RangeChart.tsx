@@ -15,7 +15,6 @@ import Track from "./components/Track";
 import Grid from "./components/Grid";
 import Handle from "./components/Handle";
 import Bar from "./components/Bar";
-import Tooltip from "./components/Tooltip";
 import Slot from "./components/Slot";
 import Label from "./components/Label";
 import Dot from "./components/Dot";
@@ -43,7 +42,6 @@ interface RangeChartProps {
   defaultValues?: number[];
   onChangeCallback: (params: RangeChartData) => void;
   isGridVisible?: boolean;
-  tooltipComponent?: React.ReactElement<any>;
 }
 
 const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
@@ -58,7 +56,6 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     defaultValues = [],
     onChangeCallback,
     isGridVisible = false,
-    tooltipComponent,
   } = props;
 
   const [selectedValues, setSelectedValues] = useState(defaultValues);
@@ -248,9 +245,12 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
             const barData = barDataMap[index];
             const dotData = dotDataMap[index];
 
+            const position = valueFormatter(index);
+
             return (
               <>
                 <Bar
+                  position={position}
                   color={configMap.colorList[index]}
                   data={barData}
                   minValue={0}
@@ -262,7 +262,6 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
                   minValue={0}
                   maxValue={Math.max(dotMaxValue, 0.001)}
                 />
-                <Tooltip index={index}>{tooltipComponent}</Tooltip>
               </>
             );
           }}

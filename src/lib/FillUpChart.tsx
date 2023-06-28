@@ -6,7 +6,6 @@ import { Slider } from "react-compound-slider";
 
 import Grid from "./components/Grid";
 import Bar from "./components/Bar";
-import Tooltip from "./components/Tooltip";
 import Slot from "./components/Slot";
 import Label from "./components/Label";
 
@@ -19,7 +18,6 @@ interface FillUpChartProp {
   data: BarData[];
   labels: number[];
   trackConfig: TrackConfig[];
-  tooltipComponent?: React.ReactElement<any>;
   selectedAmount: number;
   selectableLabel: string;
   selectedLabel?: string;
@@ -33,7 +31,6 @@ function FillUpChart(props: FillUpChartProp) {
     data = [],
     height,
     width,
-    tooltipComponent,
     selectedAmount,
     reverse = false,
     selectableLabel,
@@ -113,16 +110,16 @@ function FillUpChart(props: FillUpChartProp) {
       >
         <Slot size={configMap.track.length} height={height} className={`graph`}>
           {({ index }) => {
+            const position = valueFormatter(index);
+
             return (
-              <>
-                <Bar
-                  color={configMap.colorList[index]}
-                  data={dataMap[index]}
-                  minValue={0}
-                  maxValue={maxValue}
-                />
-                <Tooltip index={index}>{tooltipComponent}</Tooltip>
-              </>
+              <Bar
+                color={configMap.colorList[index]}
+                data={dataMap[index]}
+                minValue={0}
+                maxValue={Math.max(maxValue, 0.001)}
+                position={position}
+              />
             );
           }}
         </Slot>
