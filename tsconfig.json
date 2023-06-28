@@ -5,15 +5,14 @@
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "skipLibCheck": true,
-
     "jsx": "react",
     "module": "ESNext",
     "declaration": true,
     "sourceMap": true,
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "allowSyntheticDefaultImports": true,
-    "emitDeclarationOnly": true,
+    "declarationMap": true,
   },
   "include": ["src/lib"]
 }

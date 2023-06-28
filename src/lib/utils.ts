@@ -57,8 +57,9 @@ export function getDataMapWithSelectedValue(
       if (!data || data.length === 0) return acc;
 
       const values = data.find((d) => d.key === key)?.value;
-
-      const newItem = values!.flatMap((value) => {
+      const defaultItem = [ { label: selectedLabel, amount: 0 },
+        { label: 'none', amount: 0 }]
+      const newItem = values?.flatMap((value) => {
         if (value.label !== selectableLabel) return value;
         const unselected = Math.max(value.amount - acc.remainAmount, 0);
         const selected = value.amount - unselected;
@@ -68,7 +69,7 @@ export function getDataMapWithSelectedValue(
           { label: value.label, amount: unselected },
         ];
       });
-      acc.map[index] = newItem;
+      acc.map[index] = newItem || defaultItem;
 
       return acc;
     },
