@@ -64,9 +64,6 @@
     "rollup-plugin-postcss": "^4.0.2",
     "typescript": "^5.0.4"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
