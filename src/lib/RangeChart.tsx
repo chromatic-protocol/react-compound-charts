@@ -85,8 +85,8 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
   }, [barData]);
 
   const dotMaxValue = useMemo<number>(() => {
-    return Math.max(...dotData.map(({ value }) => value)) * 1.2;
-  }, [barData]);
+    return Math.max(...dotData.map(({ value }) => value));
+  }, [dotData]);
 
   const valueFormatter = (index: number) => configMap.track[index];
 
