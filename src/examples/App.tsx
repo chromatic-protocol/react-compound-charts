@@ -73,7 +73,8 @@ function App() {
     move,
   } = useRangeChart();
 
-  const [toggleState, setToggleState] = useState(false);
+  const [dotState, setDotState] = useState(false);
+  const [handleState, setHandleState] = useState(true);
 
   const [selectedAmount1, setSelectedAmount1] = useState<number>(0);
 
@@ -86,7 +87,10 @@ function App() {
       <div>Min: {min}</div>
       <div>Max: {max}</div>
       <div>Values: {values?.toString()}</div>
-      <button onClick={() => setToggleState(!toggleState)}>Toggle</button>
+      <button onClick={() => setDotState(!dotState)}>Toggle Dots</button>
+      <button onClick={() => setHandleState(!handleState)}>
+        Toggle Handles
+      </button>
       <button onClick={() => move().left.prev()}>{"<-"}</button>
       <button onClick={() => move().left.next()}>{"->"}</button>
       <button onClick={() => move().right.prev()}>{"<-"}</button>
@@ -99,19 +103,20 @@ function App() {
         <RangeChart
           ref={ref}
           barData={barSample}
-          dotData={toggleState ? dotSample : undefined}
+          dotData={dotState ? dotSample : undefined}
           trackConfig={track0}
           labels={ticks0}
           defaultValues={defaultSelected}
           onChangeCallback={setData}
           height={300}
           width={700}
-          isGridVisible={toggleState}
+          isGridVisible={dotState}
+          isHandlesVisible={handleState}
         />
       </div>
 
       <h2>Empty</h2>
-      <button onClick={() => setToggleState(!toggleState)}>Toggle</button>
+      <button onClick={() => setDotState(!dotState)}>Toggle</button>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <RangeChart
           barData={[]}
@@ -119,10 +124,9 @@ function App() {
           trackConfig={track0}
           labels={ticks0}
           defaultValues={defaultSelected}
-          onChangeCallback={setData}
           height={300}
           width={700}
-          isGridVisible={toggleState}
+          isGridVisible={dotState}
         />
       </div>
 

@@ -40,8 +40,9 @@ interface RangeChartProps {
   labels: number[];
   trackConfig: TrackConfig[];
   defaultValues?: number[];
-  onChangeCallback: (params: RangeChartData) => void;
+  onChangeCallback?: (params: RangeChartData) => void;
   isGridVisible?: boolean;
+  isHandlesVisible?: boolean;
 }
 
 const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
@@ -54,8 +55,9 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     labels,
     trackConfig,
     defaultValues = [],
-    onChangeCallback,
+    onChangeCallback = () => {},
     isGridVisible = false,
+    isHandlesVisible = true,
   } = props;
 
   const [selectedValues, setSelectedValues] = useState(defaultValues);
@@ -210,36 +212,40 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
         values={selectedIndexes}
         rootStyle={{ position: "relative", width: "100%" }}
       >
-        <Handles>
-          {({ handles, getHandleProps }) => (
-            <>
-              {handles.map((handle) => (
-                <Handle
-                  key={handle.id}
-                  handle={handle}
-                  domain={domain}
-                  format={valueFormatter}
-                  getHandleProps={getHandleProps}
-                />
-              ))}
-            </>
-          )}
-        </Handles>
-        <Tracks left={false} right={false}>
-          {({ tracks, getTrackProps }) => (
-            <>
-              {tracks?.map(({ id, source, target }) => (
-                <Track
-                  key={id}
-                  source={source}
-                  target={target}
-                  height={height}
-                  getTrackProps={getTrackProps}
-                />
-              ))}
-            </>
-          )}
-        </Tracks>
+        {isHandlesVisible && (
+          <Handles>
+            {({ handles, getHandleProps }) => (
+              <>
+                {handles.map((handle) => (
+                  <Handle
+                    key={handle.id}
+                    handle={handle}
+                    domain={domain}
+                    format={valueFormatter}
+                    getHandleProps={getHandleProps}
+                  />
+                ))}
+              </>
+            )}
+          </Handles>
+        )}
+        {isHandlesVisible && (
+          <Tracks left={false} right={false}>
+            {({ tracks, getTrackProps }) => (
+              <>
+                {tracks?.map(({ id, source, target }) => (
+                  <Track
+                    key={id}
+                    source={source}
+                    target={target}
+                    height={height}
+                    getTrackProps={getTrackProps}
+                  />
+                ))}
+              </>
+            )}
+          </Tracks>
+        )}
         <Slot size={configMap.track.length} height={height} className={`graph`}>
           {({ index }) => {
             const barData = barDataMap[index];
