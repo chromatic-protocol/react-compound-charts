@@ -1,13 +1,13 @@
 import "./styles/index.scss";
 
-import React, { useMemo } from "react";
+import React, { ReactNode, useMemo } from "react";
 
 import { Slider } from "react-compound-slider";
 
-import Grid from "./components/Grid";
 import Bar from "./components/Bar";
-import Slot from "./components/Slot";
+import Grid from "./components/Grid";
 import Label from "./components/Label";
+import Slot from "./components/Slot";
 
 import { BarData, BarDataMap, Color, ConfigMap, TrackConfig } from "./types";
 import { getDataMapWithSelectedValue } from "./utils";
@@ -22,6 +22,7 @@ interface FillUpChartProp {
   selectableLabel: string;
   selectedLabel?: string;
   reverse?: boolean;
+  customLabelFormatter?: (arg: number) => ReactNode;
 }
 
 function FillUpChart(props: FillUpChartProp) {
@@ -35,6 +36,7 @@ function FillUpChart(props: FillUpChartProp) {
     reverse = false,
     selectableLabel,
     selectedLabel = "selected",
+    customLabelFormatter,
   } = props;
 
   const configMap = useMemo(() => {
@@ -126,10 +128,18 @@ function FillUpChart(props: FillUpChartProp) {
         <Slot size={configMap.track.length} height={height} className={`grid`}>
           {({ index }) => {
             const value = valueFormatter(index);
+            const formattedValue =
+              customLabelFormatter === undefined
+                ? value
+                : customLabelFormatter(value);
 
             return (
               <>
-                <Label value={value} isVisible={labels.includes(value)} />
+                <Label
+                  value={value}
+                  formattedValue={formattedValue}
+                  isVisible={labels.includes(value)}
+                />
                 <Grid value={value} isBold={labels.includes(value)} />
               </>
             );
