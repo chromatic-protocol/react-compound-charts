@@ -1,11 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface LabelProps {
   value: number;
+  formattedValue?: ReactNode;
   isVisible?: boolean;
 }
 
-const Label = ({ value, isVisible = false }: LabelProps) => {
+const Label = ({ value, formattedValue, isVisible = false }: LabelProps) => {
   const isPositive = value > 0;
 
   const labelPosition = isPositive
@@ -24,7 +25,9 @@ const Label = ({ value, isVisible = false }: LabelProps) => {
             className={`react_range__label_wrapper`}
             style={{ ...labelPosition }}
           >
-            <div className={`react_range__label`}>{value}</div>
+            <div className={`react_range__label`}>
+              {formattedValue ?? value}
+            </div>
           </div>
         </>
       )}

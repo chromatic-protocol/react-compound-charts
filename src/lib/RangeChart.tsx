@@ -1,23 +1,24 @@
 import "./styles/index.scss";
 
 import React, {
-  memo,
-  useMemo,
+  ReactNode,
   forwardRef,
-  useImperativeHandle,
-  useState,
+  memo,
   useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
 } from "react";
 
-import { Slider, Handles, Tracks } from "react-compound-slider";
+import { Handles, Slider, Tracks } from "react-compound-slider";
 
-import Track from "./components/Track";
+import Bar from "./components/Bar";
+import Dot from "./components/Dot";
 import Grid from "./components/Grid";
 import Handle from "./components/Handle";
-import Bar from "./components/Bar";
-import Slot from "./components/Slot";
 import Label from "./components/Label";
-import Dot from "./components/Dot";
+import Slot from "./components/Slot";
+import Track from "./components/Track";
 
 import {
   BarData,
@@ -43,6 +44,7 @@ interface RangeChartProps {
   onChangeCallback?: (params: RangeChartData) => void;
   isGridVisible?: boolean;
   isHandlesVisible?: boolean;
+  customLabelFormatter?: (arg: number) => ReactNode;
 }
 
 const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
@@ -58,6 +60,7 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     onChangeCallback = () => {},
     isGridVisible = false,
     isHandlesVisible = true,
+    customLabelFormatter,
   } = props;
 
   const [selectedValues, setSelectedValues] = useState(defaultValues);
@@ -275,10 +278,18 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
         <Slot size={configMap.track.length} height={height} className={`grid`}>
           {({ index }) => {
             const value = valueFormatter(index);
+            const formattedValue =
+              customLabelFormatter === undefined
+                ? value
+                : customLabelFormatter(value);
 
             return (
               <>
-                <Label value={value} isVisible={labels.includes(value)} />
+                <Label
+                  value={value}
+                  formattedValue={formattedValue}
+                  isVisible={labels.includes(value)}
+                />
                 <Grid
                   value={value}
                   isVisible={isGridVisible}
