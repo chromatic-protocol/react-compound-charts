@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 import {
+  barSample,
   selectedInterval as defaultSelected,
-  track0,
-  track1,
-  track2,
+  dotSample,
   ticks0,
   ticks1,
   ticks2,
-  barSample,
-  dotSample,
+  track0,
+  track1,
+  track2,
 } from "./sampledata";
 
 import { FillUpChart, RangeChart } from "../lib";
@@ -17,8 +17,8 @@ import { useRangeChart } from "../lib/hooks/useRangeChart";
 
 import SampleSlider from "./SampleSlider";
 
-import { Tooltip } from "react-tooltip";
 import { shift } from "@floating-ui/dom";
+import { Tooltip } from "react-tooltip";
 
 function ToolTipComponent() {
   function getValues(key: any) {
@@ -112,6 +112,7 @@ function App() {
           width={700}
           isGridVisible={dotState}
           isHandlesVisible={handleState}
+          labelFormatter={(value) => `${value}%`}
         />
       </div>
 
@@ -152,6 +153,7 @@ function App() {
           reverse={true}
           height={300}
           width={700}
+          labelSuffix="%"
           selectableLabel="available"
         />
       </div>
