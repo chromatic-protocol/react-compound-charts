@@ -22,7 +22,9 @@ interface FillUpChartProp {
   selectableLabel: string;
   selectedLabel?: string;
   reverse?: boolean;
-  customLabelFormatter?: (arg: number) => ReactNode;
+  labelPrefix?: string;
+  labelSuffix?: string;
+  labelFormatter?: (arg: number) => ReactNode;
 }
 
 function FillUpChart(props: FillUpChartProp) {
@@ -36,7 +38,9 @@ function FillUpChart(props: FillUpChartProp) {
     reverse = false,
     selectableLabel,
     selectedLabel = "selected",
-    customLabelFormatter,
+    labelPrefix,
+    labelSuffix,
+    labelFormatter,
   } = props;
 
   const configMap = useMemo(() => {
@@ -128,16 +132,15 @@ function FillUpChart(props: FillUpChartProp) {
         <Slot size={configMap.track.length} height={height} className={`grid`}>
           {({ index }) => {
             const value = valueFormatter(index);
-            const formattedValue =
-              customLabelFormatter === undefined
-                ? value
-                : customLabelFormatter(value);
+            const label = labelFormatter ? labelFormatter(value) : value;
 
             return (
               <>
                 <Label
                   value={value}
-                  formattedValue={formattedValue}
+                  label={label}
+                  prefix={labelPrefix}
+                  suffix={labelSuffix}
                   isVisible={labels.includes(value)}
                 />
                 <Grid value={value} isBold={labels.includes(value)} />

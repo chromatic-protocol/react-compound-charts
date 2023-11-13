@@ -44,7 +44,9 @@ interface RangeChartProps {
   onChangeCallback?: (params: RangeChartData) => void;
   isGridVisible?: boolean;
   isHandlesVisible?: boolean;
-  customLabelFormatter?: (arg: number) => ReactNode;
+  labelPrefix?: string;
+  labelSuffix?: string;
+  labelFormatter?: (arg: number) => ReactNode;
 }
 
 const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
@@ -60,7 +62,9 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
     onChangeCallback = () => {},
     isGridVisible = false,
     isHandlesVisible = true,
-    customLabelFormatter,
+    labelPrefix,
+    labelSuffix,
+    labelFormatter,
   } = props;
 
   const [selectedValues, setSelectedValues] = useState(defaultValues);
@@ -278,16 +282,15 @@ const RangeChart = forwardRef<RangeChartRef, RangeChartProps>((props, _ref) => {
         <Slot size={configMap.track.length} height={height} className={`grid`}>
           {({ index }) => {
             const value = valueFormatter(index);
-            const formattedValue =
-              customLabelFormatter === undefined
-                ? value
-                : customLabelFormatter(value);
+            const label = labelFormatter ? labelFormatter(value) : value;
 
             return (
               <>
                 <Label
                   value={value}
-                  formattedValue={formattedValue}
+                  label={label}
+                  prefix={labelPrefix}
+                  suffix={labelSuffix}
                   isVisible={labels.includes(value)}
                 />
                 <Grid

@@ -112,7 +112,7 @@ function App() {
           width={700}
           isGridVisible={dotState}
           isHandlesVisible={handleState}
-          customLabelFormatter={(value) => value + "%"}
+          labelFormatter={(value) => `${value}%`}
         />
       </div>
 
@@ -153,6 +153,7 @@ function App() {
           reverse={true}
           height={300}
           width={700}
+          labelSuffix="%"
           selectableLabel="available"
         />
       </div>
