@@ -64,7 +64,7 @@ function Bar(props: BarProps) {
             <Stack
               key={id}
               id={id}
-              height={`${getStackHeight(amount)}%`}
+              height={`${getStackHeight(Math.max(amount, 0))}%`}
               color={getStackColor(label)}
               position={position}
               label={label}
