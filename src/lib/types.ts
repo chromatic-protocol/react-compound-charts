@@ -50,3 +50,7 @@ export type RangeChartRef = {
     full: () => void;
   };
 };
+
+export type FillUpChartRef = {
+  getTrackMap: () => number[];
+};
